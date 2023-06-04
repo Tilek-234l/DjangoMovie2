@@ -58,14 +58,13 @@ class Movie(models.Model):
     poster = models.ImageField("Постер", upload_to="movies/")
     year = models.PositiveSmallIntegerField("Дата выхода", default=2019)
     country = models.CharField("Страна", max_length=30)
-    directors = models.ManyToManyField(Actor, verbose_name="Режиссер", related_name="film_director")
-    actors = models.ManyToManyField(Actor, verbose_name="Актеры", related_name="film_actor")
-    genres = models.ManyToManyField(Genre, verbose_name="Жанры")
-    world_premiere = models.DateField("Премьера в мире", default=date.today)
-    budget = models.PositiveIntegerField("Бюджет", default=0,
-                                         help_text="Указывать сумму в долларах")
+    directors = models.ManyToManyField(Actor, verbose_name="режиссер", related_name="film_director")
+    actors = models.ManyToManyField(Actor, verbose_name="актеры", related_name="film_actor")
+    genres = models.ManyToManyField(Genre, verbose_name="жанры")
+    world_premiere = models.DateField("Примьера в мире", default=date.today)
+    budget = models.PositiveIntegerField("Бюджет", default=0, help_text="указывать сумму в долларах")
     fees_in_usa = models.PositiveIntegerField(
-        "Сборы в США", default=0, help_text="Указывать сумму в долларах"
+        "Сборы в США", default=0, help_text="указывать сумму в долларах"
     )
     fess_in_world = models.PositiveIntegerField(
         "Сборы в мире", default=0, help_text="указывать сумму в долларах"
@@ -110,19 +109,18 @@ class RatingStar(models.Model):
     value = models.SmallIntegerField("Значение", default=0)
 
     def __str__(self):
-        return f'{self.value}'
+        return self.value
 
     class Meta:
         verbose_name = "Звезда рейтинга"
         verbose_name_plural = "Звезды рейтинга"
-        ordering = ["-value"]
 
 
 class Rating(models.Model):
     """Рейтинг"""
     ip = models.CharField("IP адрес", max_length=15)
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE, verbose_name="звезда")
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, verbose_name="фильм", related_name="ratings")
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, verbose_name="фильм")
 
     def __str__(self):
         return f"{self.star} - {self.movie}"
@@ -148,3 +146,7 @@ class Reviews(models.Model):
     class Meta:
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"
+
+
+
+
